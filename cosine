@@ -1,0 +1,25 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# ----- Documents and Query -----
+documents = [
+    "Document about python programming language and data analysis.",
+    "Document discussing machine learning algorithms and programming techniques.",
+    "Overview of natural language processing and its applications."
+]
+query = ["python programming"]
+
+# ----- TF-IDF Vectorization -----
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents + query)
+
+# Split document vectors and query vector
+doc_vectors = tfidf_matrix[:-1]
+query_vector = tfidf_matrix[-1]
+
+# ----- Cosine Similarity Calculation -----
+cosine_similarities = cosine_similarity(query_vector, doc_vectors).flatten()
+
+# ----- Display Results -----
+for i, score in enumerate(cosine_similarities):
+    print(f"Cosine similarity between Query and Document {i+1}: {score:.4f}")
