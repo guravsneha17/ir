@@ -1,0 +1,32 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Documents provided
+documents = [
+    "Document about python programming language and data analysis.",
+    "Document discussing machine learning algorithms and programming techniques.",
+    "Overview of natural language processing and its applications."
+]
+
+# Query
+query = ["python programming"]
+
+# Create a TF-IDF vectorizer
+vectorizer = TfidfVectorizer()
+
+# Fit on the documents + query to ensure consistent vectorization
+tfidf_matrix = vectorizer.fit_transform(documents + query)
+
+# Separate documents and query
+doc_vectors = tfidf_matrix[:-1]
+query_vector = tfidf_matrix[-1]
+
+# Show TF-IDF feature names and vectors (optional debug output)
+feature_names = vectorizer.get_feature_names_out()
+print("TF-IDF Feature Names:")
+print(feature_names)
+
+print("\nTF-IDF Matrix (Documents):")
+print(doc_vectors.toarray())
+
+print("\nTF-IDF Vector (Query):")
+print(query_vector.toarray())
