@@ -1,0 +1,29 @@
+# Sample documents
+documents = {
+    1: "The cat chased the dog around the garden.",
+    2: "She was sitting in the garden last night.",
+    3: "I read the book the night before."
+}
+
+# Function to build an inverted index
+def build_index(docs):
+    index = {}
+    for doc_id, text in docs.items():
+        for term in set(text.lower().split()):
+            cleaned_term = term.strip(".,!?")
+            index.setdefault(cleaned_term, set()).add(doc_id)
+    return index
+
+# Build the index
+index = build_index(documents)
+
+# Function to perform boolean OR query
+def boolean_or(terms):
+    return list(set.union(*(index.get(term, set()) for term in terms)))
+
+# OR query
+query = ["garden", "night"]
+result = boolean_or(query)
+
+# Output the result
+print("Documents matching 'garden OR night':", result)
