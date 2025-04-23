@@ -1,0 +1,43 @@
+from collections import defaultdict
+
+# ----- Link Structure -----
+links = {
+    'A': ['B', 'C', 'D'],
+    'B': ['C', 'E'],
+    'C': ['A', 'D'],
+    'D': [],
+    'E': []
+}
+
+pages = links.keys()
+n = len(pages)
+damping = 0.85
+
+# ----- Initial PageRank -----
+pagerank = {page: 1 / n for page in pages}
+
+# ----- Incoming Links Dictionary -----
+incoming_links = defaultdict(list)
+for src, targets in links.items():
+    for target in targets:
+        incoming_links[target].append(src)
+
+# ----- PageRank Calculation Function -----
+def compute_pagerank(iterations=10):
+    global pagerank
+    for _ in range(iterations):
+        new_rank = {}
+        for page in pages:
+            rank_sum = 0
+            for incoming in incoming_links[page]:
+                rank_sum += pagerank[incoming] / len(links[incoming])
+            new_rank[page] = (1 - damping) / n + damping * rank_sum
+        pagerank = new_rank
+
+# ----- Run PageRank -----
+compute_pagerank()
+
+# ----- Display Final Scores -----
+print("Final PageRank scores:")
+for page, score in sorted(pagerank.items(), key=lambda x: x[1], reverse=True):
+    print(f"Page {page}: {score:.4f}")
