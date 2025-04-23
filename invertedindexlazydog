@@ -1,0 +1,40 @@
+from collections import defaultdict
+
+# Documents
+documents = {
+    "doc1": "The quick brown fox jumped over the lazy dog.",
+    "doc2": "The lazy dog slept in the sun."
+}
+
+# Preprocessing function
+def preprocess(text):
+    return text.lower().replace(".", "").split()
+
+# Build inverted index
+inverted_index = defaultdict(list)
+
+for doc_id, text in documents.items():
+    words = preprocess(text)
+    for position, word in enumerate(words):
+        if doc_id not in inverted_index[word]:
+            inverted_index[word].append(doc_id)
+
+# Display the inverted index
+print("Inverted Index:")
+for term in sorted(inverted_index):
+    print(f"{term}: {inverted_index[term]}")
+
+# Query processing
+query_terms = ["lazy", "sun"]
+result_docs = set(documents.keys())
+
+for term in query_terms:
+    if term in inverted_index:
+        result_docs = result_docs.intersection(set(inverted_index[term]))
+    else:
+        result_docs = set()
+        break
+
+# Output documents that match all query terms
+print("\nDocuments containing the terms 'lazy sun':")
+print(result_docs)
