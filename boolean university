@@ -1,0 +1,21 @@
+# Sample Documents
+documents = {
+    1: "The university exam is scheduled next week.",
+    2: "The university of mumbai has declared the result."
+}
+
+# Preprocessing Function
+def preprocess(text):
+    return set(text.lower().replace(".", "").split())
+
+# Build Inverted Index
+inverted_index = {doc_id: preprocess(text) for doc_id, text in documents.items()}
+
+# Query: "university AND mumbai"
+query_terms = {"university", "mumbai"}
+
+# Boolean Retrieval (AND operation)
+result_docs = {doc_id for doc_id, words in inverted_index.items() if query_terms.issubset(words)}
+
+# Output Result
+print("Documents matching 'university AND mumbai':", sorted(result_docs))
